@@ -56,6 +56,10 @@ var serveIdentityCmd = &cobra.Command{
 }
 
 func runServer(cmd *cobra.Command, isIdentity bool) {
+	if err := cli.SetFlagsFromEnv(cmd.Flags()); err != nil {
+		slog.Error(err.Error())
+		os.Exit(1)
+	}
 	if err := viper.BindPFlags(cmd.Flags()); err != nil {
 		slog.Error(err.Error())
 		os.Exit(1)

@@ -44,6 +44,11 @@ var serveCmd = &cobra.Command{
 	Short: "start the Rekor server",
 	Long:  "start the Rekor server",
 	Run: func(cmd *cobra.Command, _ []string) {
+		if err := cli.SetFlagsFromEnv(cmd.Flags()); err != nil {
+			slog.Error(err.Error())
+			os.Exit(1)
+		}
+
 		ctx := cmd.Context()
 
 		logLevel := slog.LevelInfo

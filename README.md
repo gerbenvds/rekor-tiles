@@ -70,6 +70,18 @@ and set the following environment variables:
 <!-- TODO: Replace with https://c2sp.org/identity-transparency once https://github.com/C2SP/C2SP/pull/244 is merged -->
 * `serve-identity`: **Unstable, do not use in production as the leaf format is very likely to change**. Starts the [identity transparency log](https://github.com/C2SP/C2SP/pull/244) server (accepting public key and OIDC credentials, configured via `--oidc-config`). Supported by `rekor-server-gcp` and `rekor-server-posix`. Primarily for post-quantum cryptographic signing.
 
+## Configuration
+
+Every `rekor-server` flag can also be set through an environment variable: the flag name in uppercase,
+with dashes replaced by underscores and prefixed with `REKOR_`. For example, `--aws-mysql-dsn` can be set with
+`REKOR_AWS_MYSQL_DSN` and `--http-port` with `REKOR_HTTP_PORT`. List values are comma-separated, as on the
+command line. A flag given on the command line takes precedence over its environment variable.
+
+Prefer environment variables for secrets such as `--aws-mysql-dsn`, `--gcp-cloudsql-dsn` and `--signer-password`:
+command-line arguments are visible to every user on the host (e.g. through `ps`), while a process's environment
+is only readable by its owner and root. On Kubernetes, the variable can be populated directly from a Secret
+with `valueFrom.secretKeyRef`.
+
 ## Public-good instance
 
 The Sigstore community hosts a productionized instance of Rekor v2 with a 99.5% availability SLO.
